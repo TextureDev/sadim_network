@@ -10,24 +10,20 @@ limiter.init_app(app)
 
 from app.routes.index import main_bp
 from app.routes.errors import errors_bp
-from app.routes.admin import admin_bp
+
+from app.routes.admin.admin import admin_bp
 from app.routes.loding import loading_bp
 from app.routes.register import register_bp
 from app.routes.apis.chatbot_api import bot_bp
 from app.routes.LIBRARY_SADIM.Agatha_Christie import Library_Agatha_bp
+from app.routes.admin.profile import profile_bp
 #blueprint
 app.register_blueprint(loading_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(profile_bp)
 
 app.register_blueprint(errors_bp)
 app.register_blueprint(main_bp)
 app.register_blueprint(register_bp)
 app.register_blueprint(bot_bp)
 app.register_blueprint(Library_Agatha_bp)
-
-
-
-
-
-
-    

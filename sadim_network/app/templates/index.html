@@ -25,7 +25,7 @@
             <li><a href="#home">الرئيسية</a></li>
             <li><a href="{{ url_for('Library_Agatha.agatha_christie') }}">مكتبة أجاثا</a></li>
             <li><a href="{{url_for('admin.show_services')}}">خدماتنا</a></li>
-            <li><a href="mailto:thazraa2019@gmail.com">اتصل بنا</a></li>
+            <li><a href="mailto:admin@sadim.cloud">اتصل بنا</a></li>
             <li><a href="{{url_for('main.about')}}">من نحن</a></li>
         </ul>
 
@@ -46,8 +46,9 @@
         <li><a href="#home">الرئيسية</a></li>
         <li><a href="{{ url_for('Library_Agatha.agatha_christie') }}">مكتبة أجاثا</a></li>
         <li><a href="{{url_for('admin.show_services')}}">خدماتنا</a></li>
-        <li><a href="mailto:thazraa2019@gmail.com">اتصل بنا</a></li>
+        <li><a href="mailto:admin@sadim.cloud">اتصل بنا</a></li>
         <li><a href="{{url_for('main.about')}}">من نحن</a></li>
+        <li><a href="{{url_for('main.support')}}">مركز الدعم</a></li>
     </ul>
 
     <div class="mobile-buttons">
@@ -147,7 +148,7 @@ closeBtn.addEventListener('click', () => {
     <ul style="list-style:none; padding:0; display:flex; gap:2rem; flex-wrap:wrap; justify-content:flex-start;">
         <li><a href="#home" style="text-decoration:none; color:#f0ebeb;">الرئيسية</a></li>
         <li><a href="{{url_for('admin.show_services')}}" style="text-decoration:none; color:#f5f0f0;">خدماتنا</a></li>
-        <li><a href="mailto:thazraa2019@gmail.com" style="text-decoration:none; color:#f0e9e9;">اتصل بنا</a></li>
+        <li><a href="mailto:admin@sadim.cloud" style="text-decoration:none; color:#f0e9e9;">اتصل بنا</a></li>
         <li><a href="{{url_for('main.about')}}" style="text-decoration:none; color:#e6e3e3;">من نحن</a></li>
         <li><a href="{{ url_for('register.register_user') }}" style="text-decoration:none; color:#efeaea;">انضم إلينا</a></li>
         <li><a href="{{ url_for('loading_bp.login') }}" style="text-decoration:none; color:#f3eeee;">تسجيل دخول</a></li>
@@ -177,13 +178,15 @@ closeBtn.addEventListener('click', () => {
               <i class="fab fa-whatsapp"></i>
           </a>
       
-<a href="https://mail.google.com/mail/?view=cm&to=moslah20040@gmail.com" target="_blank">
-    <i class="fas fa-envelope"></i>
-</a>
+          <a href="https://mail.google.com/mail/?view=cm&to=admin@sadim.cloud" target="_blank">
+              <i class="fas fa-envelope"></i>
+          </a>
 
       </div>
-
-        
+       <div class="support-link">
+         <a href="{{ url_for('main.support') }}">هل تحتاج إلى مساعدة؟ اتصل بالدعم</a>
+       </div>
+           
         <p style="font-size: 0.8rem; opacity: 0.4;">صنع بكل حب &copy; SADEM_NETWORK® 2026</p>
     </footer>
 </body>

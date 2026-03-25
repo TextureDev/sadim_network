@@ -1,4 +1,3 @@
-
 from flask import Blueprint, request, render_template, flash, redirect, url_for
 from models.user import User
 from models.verification_token import Email
@@ -10,12 +9,10 @@ from app.limiter import limiter
 
 register_bp = Blueprint('register', __name__)
 
-
 @register_bp.route('/register', methods=['GET'])
 @limiter.limit("5 per minute")
 def show_registration_form():
     return render_template('auth/register.html')
-
 
 @register_bp.route('/register', methods=['POST'])
 def register_user():
@@ -70,6 +67,10 @@ def register_user():
     # بعد حفظ المستخدم في جدول users
 @register_bp.before_app_request
 def log_visitor():
+    # تجاهل الملفات الثابتة
+    if request.path.startswith('/static/'):
+        return
+
     ip = request.remote_addr
     user_agent = request.headers.get("User-Agent")
     path = request.path
@@ -86,5 +87,3 @@ def log_visitor():
         conn.close()
     except Exception as e:
         print("Failed to log visitor:", e)
-    
-    

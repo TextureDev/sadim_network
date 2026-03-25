@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدعم الفني – شبكة سديم</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/support.css') }}" />
+  <style>/* =========================
+   THEME SYSTEM
+========================= */
+
+:root {
+  --font-family: 'Cairo', 'Tajawal', sans-serif;
+  --radius: 14px;
+  --transition: all .3s ease;
+}
+
+/* LIGHT */
+:root.light {
+  --bg:          #f8f7fb;
+  --surface:     #ffffff;
+  --surface2:    #f1eef6;
+  --border:      rgba(0,0,0,0.08);
+  --text:        #1a1a2e;
+  --text-muted:  #5c5f73;
+  --accent:      #6c4ab6;
+  --accent-soft: rgba(108,74,182,0.1);
+}
+
+/* DARK */
+:root.dark {
+  --bg:          #050810;
+  --surface:     #0d1226;
+  --surface2:    #111827;
+  --border:      rgba(99,140,255,0.12);
+  --text:        #e8eaf6;
+  --text-muted:  #7986a3;
+  --accent:      #4f7eff;
+  --accent-soft: rgba(79,126,255,0.1);
+}
+
+/* =========================
+   BASE
+========================= */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* =========================
+   BACKGROUND
+========================= */
+
+#stars {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.nebula {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: 0;
+  opacity: .15;
+  pointer-events: none;
+}
+
+.nebula-1 {
+  width: 500px; height: 500px;
+  background: var(--accent);
+  top: -120px; right: -120px;
+}
+
+.nebula-2 {
+  width: 400px; height: 400px;
+  background: var(--accent);
+  bottom: -100px; left: -100px;
+}
+
+/* =========================
+   NAV
+========================= */
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.nav-logo {
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.nav-links a:hover { color: var(--text); }
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+  text-align: center;
+  padding: 5rem 1rem 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: .4rem 1rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: .8rem;
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: auto;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem 1rem 5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.section-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+/* =========================
+   FAQ
+========================= */
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: .8rem;
+  margin-bottom: 3rem;
+}
+
+details {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+summary {
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  user-select: none;
+}
+
+summary::-webkit-details-marker { display: none; }
+
+summary::after {
+  content: '+';
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 300;
+  transition: var(--transition);
+}
+
+details[open] summary::after { content: '−'; }
+
+.faq-body {
+  padding: 0 1.2rem 1.2rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.faq-body ol {
+  padding-right: 1.2rem;
+  margin-top: .5rem;
+}
+
+.faq-body li { margin-bottom: .3rem; }
+
+/* =========================
+   CONTACT
+========================= */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.contact-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+  display: block;
+}
+
+.contact-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+}
+
+.card-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: .6rem;
+}
+
+.card-label {
+  font-size: .85rem;
+  color: var(--text-muted);
+  margin-bottom: .3rem;
+}
+
+.card-value {
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: .4rem;
+}
+
+.card-desc {
+  font-size: .8rem;
+  color: var(--text-muted);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   THEME TOGGLE BUTTON
+========================= */
+
+#themeToggle {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 999;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+
+#themeToggle:hover {
+  border-color: var(--accent);
+  transform: scale(1.1);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+  nav { padding: .8rem 1rem; }
+  .nav-links { gap: 1rem; }
+  .hero { padding: 3.5rem 1rem 2rem; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background -->
+<div class="nebula nebula-1"></div>
+<div class="nebula nebula-2"></div>
+<div id="stars"><canvas id="starCanvas"></canvas></div>
+
+<!-- Nav -->
+<nav>
+  <a class="nav-logo" href="https://sadim.cloud">شبكة سديم</a>
+  <ul class="nav-links">
+    <li><a href="https://sadim.cloud">الرئيسية</a></li>
+    <li><a href="https://sadim.cloud/dashboard/services">الخدمات</a></li>
+    <li><a href="https://sadim.cloud/about">من نحن</a></li>
+  </ul>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <span class="hero-badge">مركز الدعم</span>
+  <h1>كيف نقدر نساعدك؟</h1>
+  <p>إجابات على أكثر الأسئلة شيوعاً، وقنوات تواصل مباشرة مع فريق سديم.</p>
+</section>
+
+<!-- Main -->
+<div class="container">
+
+  <!-- FAQ -->
+  <p class="section-title">الأسئلة الشائعة</p>
+
+  <div class="faq-list">
+
+    <details open>
+      <summary>كيف أفعّل حسابي في شبكة سديم؟</summary>
+      <div class="faq-body">
+        بعد إنشاء حسابك، اتبع الخطوات التالية:
+        <ol>
+          <li>افتح بريدك الإلكتروني.</li>
+          <li>ابحث عن رسالة التفعيل من sadim.cloud.</li>
+          <li>اذا لم تجده ابحث على الرسائل الغير مرغوبة.</li>
+          <li>ستجده هناك ثم</li>
+          <li>اضغط على الرابط.</li>
+          <li>سيتم تفعيل حسابك مباشرة.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details>
+      <summary>كيف أتواصل مع فريق الدعم؟</summary>
+      <div class="faq-body">
+        يمكنك التواصل عبر:
+        <ol>
+          <li>بوت تيليغرام: @SADIM_Sbot</li>
+          <li>الدعم المباشر: @SADIM_SUPPORT</li>
+          <li>البريد: admin@sadim.cloud</li>
+        </ol>
+      </div>
+    </details>
+
+    <details>
+      <summary>ما الفرق بين البوت والدعم المباشر؟</summary>
+      <div class="faq-body">
+        البوت يستقبل الرسائل ويحولها، أما الدعم المباشر فهو تواصل بشري.
+      </div>
+    </details>
+
+    <details>
+      <summary>كم وقت الرد؟</summary>
+      <div class="faq-body">
+        غالباً خلال دقائق في تيليغرام، وحتى 24 ساعة بالبريد.
+      </div>
+    </details>
+
+    <details>
+      <summary>نسيت كلمة المرور؟</summary>
+      <div class="faq-body">
+        استخدم خيار "نسيت كلمة المرور" وسيتم إرسال رابط إعادة التعيين.
+      </div>
+    </details>
+
+  </div>
+
+  <!-- Contact -->
+  <p class="section-title">قنوات التواصل</p>
+
+  <div class="contact-grid">
+
+    <a class="contact-card" href="https://t.me/SADIM_Sbot" target="_blank">
+      <span class="card-icon">🤖</span>
+      <p class="card-label">بوت الدعم</p>
+      <p class="card-value">@SADIM_Sbot</p>
+      <p class="card-desc">مساعدة فورية عبر البوت</p>
+    </a>
+
+    <a class="contact-card" href="https://t.me/SADIM_SUPPORT" target="_blank">
+      <span class="card-icon">💬</span>
+      <p class="card-label">الدعم المباشر</p>
+      <p class="card-value">@SADIM_SUPPORT</p>
+      <p class="card-desc">تواصل مباشر مع الفريق</p>
+    </a>
+
+    <a class="contact-card" href="mailto:admin@sadim.cloud">
+      <span class="card-icon">✉️</span>
+      <p class="card-label">البريد</p>
+      <p class="card-value">admin@sadim.cloud</p>
+      <p class="card-desc">للاستفسارات الرسمية</p>
+    </a>
+
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 SADIM_NETWORK</p>
+</footer>
+
+<!-- Theme Toggle -->
+<button id="themeToggle">🌓</button>
+
+<script>
+/* ── Theme ─────────────────────────────────────────────────────────────────── */
+function setTheme(theme) {
+  document.documentElement.classList.remove('dark', 'light');
+  document.documentElement.classList.add(theme);
+  localStorage.setItem('theme', theme);
+}
+
+document.getElementById('themeToggle').onclick = function () {
+  setTheme(document.documentElement.classList.contains('dark') ? 'light' : 'dark');
+};
+
+// تحميل الثيم المحفوظ عند الفتح
+setTheme(localStorage.getItem('theme') || 'dark');
+
+/* ── Stars ─────────────────────────────────────────────────────────────────── */
+const canvas = document.getElementById('starCanvas');
+const ctx    = canvas.getContext('2d');
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const STARS = Array.from({ length: 150 }, () => ({
+  x:     Math.random(),
+  y:     Math.random(),
+  r:     Math.random() * 1.2 + 0.2,
+  a:     Math.random(),
+  speed: Math.random() * 0.004 + 0.001,
+  phase: Math.random() * Math.PI * 2
+}));
+
+let t = 0;
+(function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  t += 0.01;
+  for (const s of STARS) {
+    const alpha = s.a * (0.5 + 0.5 * Math.sin(t * s.speed * 60 + s.phase));
+    ctx.beginPath();
+    ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(180,200,255,${alpha})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(draw);
+})();
+</script>
+
+</body>
+</html>

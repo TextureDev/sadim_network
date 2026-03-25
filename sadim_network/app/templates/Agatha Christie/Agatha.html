@@ -25,7 +25,7 @@
 
         <li><a href="{{url_for('admin.show_services')}}"><i class="fa-solid fa-gem"></i> خدماتنا</a></li>
         <li><a href="{{url_for('main.about')}}"><i class="fa-solid fa-feather-pointed"></i> من نحن</a></li>
-        <li><a href="mailto:thazraa2019@gmail.com"><i class="fa-solid fa-envelope"></i> اتصل بنا</a></li>
+        <li><a href="mailto:admin@sadim.cloud"><i class="fa-solid fa-envelope"></i> اتصل بنا</a></li>
     </ul>
 </nav>
 
@@ -51,7 +51,7 @@
 </header>
 
 <section class="about-agatha">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Agatha_Christie.png" alt="Agatha" class="about-img">
+    <img src="{{ url_for('Library_Agatha.static', filename='images/اغاثا.webp') }}" alt="Agatha Christie" class="about-img">
     <div class="about-content">
         <h2 style="color: var(--soft-gold); font-family: 'Amiri', serif;">أجاثا كريستي.. سيدة الغموض</h2>
         <p>الروائية الأكثر مبيعاً في التاريخ؛ اكتشف عالم الجريمة والذكاء عبر مكتبتنا الملكية.</p>
@@ -87,17 +87,11 @@
             {{ book.desc_text | truncate(75) }}
         </p>
         
-        {% if session.get('user_id') %}
-            <a href="{{ url_for('Library_Agatha.download_file', book_id=book.id) }}" 
-               class="btn-royal" 
-               onclick="updateCount(event, {{ book.id }}, this.href)">
-                <i class="fa-solid fa-download"></i> تحميل PDF ملكي
-            </a>
-        {% else %}
-            <a href="{{ url_for('loading_bp.login', next=request.path) }}" class="btn-royal" style="border-style: dashed;">
-                <i class="fa-solid fa-lock"></i> سجل دخول للتحميل
-            </a>
-        {% endif %}
+        <a href="{{ url_for('Library_Agatha.download_file', book_id=book.id) }}" 
+           class="btn-royal" 
+           onclick="updateCount(event, {{ book.id }}, this.href)">
+            <i class="fa-solid fa-download"></i> تحميل PDF ملكي
+        </a>
     </div>
     {% endfor %}
 </div>

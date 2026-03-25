@@ -16,8 +16,6 @@
 
 <body>
 
-
-
     <div class="container">
 
         <!-- Logo Section -->
@@ -36,11 +34,7 @@
 
         </div>
 
-
-
         <h2>صفحة إنشاء حساب</h2>
-
-
 
         <!-- Error Message (مخفية افتراضياً) -->
 
@@ -62,8 +56,6 @@
 
             </div>
 
-
-
             <div class="mb-3">
 
                 <label for="email" class="form-label">البريد الإلكتروني</label>
@@ -71,8 +63,6 @@
                 <input type="email" class="form-control" id="email" name="email" placeholder="example@email.com" required>
 
             </div>
-
-
 
             <div class="mb-3">
 
@@ -107,7 +97,6 @@
             <button type="submit" class="btn btn-animated w-100">سجل الآن</button>
 
 
-
             <div class="divider">
 
                 <span>أو</span>
@@ -126,10 +115,7 @@
 
     </div>
 
-
-
     <!-- JavaScript للتحقق من النموذج -->
-
     <script>
 
         function validateForm() {
@@ -224,8 +210,6 @@
 
          let greeting;
 
- 
-
          if (hour < 12) greeting = "صباح الخير 🌞";
 
          else if (hour < 18) greeting = "مساء الخير 🌞";
@@ -245,7 +229,39 @@
      updateClock();
 
   </script>
-
+  <script>
+   function validateForm() {
+     const password = document.getElementById('password').value;
+     const confirm  = document.getElementById('confirm').value;
+     const email    = document.getElementById('email').value;
+     const errorMessage = document.getElementById('errorMessage');
+ 
+     function showError(msg) {
+         errorMessage.textContent = msg;
+         errorMessage.style.display = 'block';
+         setTimeout(() => { errorMessage.style.display = 'none'; }, 3000);
+     }
+ 
+     // ── تحقق الإيميل ──
+     if (!email.includes('@') || !email.includes('.')) {
+         showError('البريد الإلكتروني غير صحيح!');
+         return false;
+     }
+ 
+     // ── تطابق كلمة المرور ──
+     if (password !== confirm) {
+         showError('كلمة المرور غير متطابقة!');
+         return false;
+     }
+ 
+     // ── طول كلمة المرور ──
+     if (password.length < 6) {
+         showError('كلمة المرور يجب أن تكون 6 أحرف على الأقل!');
+         return false;
+     }
+ 
+     return true;
+    }
+  </script>
 </body>
-
 </html>

@@ -12,3 +12,8 @@ def about():
 
 
 
+@main_bp.route('/Support')
+
+def support():
+    return render_template('Support.html')
+

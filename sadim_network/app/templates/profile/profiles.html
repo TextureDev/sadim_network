@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ info.get('name', 'SAP1O') }} — {{ info.get('title', 'Backend Developer') }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;700&family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:       #08080e;
+  --bg2:      #0d0d16;
+  --surface:  #10101a;
+  --surface2: #141420;
+  --border:   #1c1c2e;
+  --border2:  #252538;
+  --accent:   #7c6af7;
+  --accent-d: #5a4bd4;
+  --accent2:  #4fc3f7;
+  --text:     #ddddf0;
+  --text2:    #9898b8;
+  --muted:    #5a5a78;
+  --success:  #4ade80;
+  --mono:     'IBM Plex Mono', monospace;
+  --arabic:   'Tajawal', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--arabic);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom Cursor */
+.cursor { position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .2s,height .2s; }
+.cursor-ring { position:fixed;width:32px;height:32px;border:1px solid rgba(124,106,247,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%); }
+
+/* Noise */
+body::before { content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:.02;pointer-events:none;z-index:0; }
+
+/* Grid */
+.grid-bg { position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(124,106,247,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,106,247,.04) 1px,transparent 1px);background-size:48px 48px; }
+
+/* Orbs */
+.orb { position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;animation:orbFloat 12s ease-in-out infinite; }
+.orb-1 { width:400px;height:400px;background:radial-gradient(circle,rgba(124,106,247,.12),transparent 70%);top:-100px;right:-100px; }
+.orb-2 { width:300px;height:300px;background:radial-gradient(circle,rgba(79,195,247,.08),transparent 70%);bottom:20%;left:-80px;animation-delay:-6s; }
+@keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)} }
+
+/* Scroll bar */
+.scroll-bar { position:fixed;top:0;right:0;width:2px;height:0%;background:linear-gradient(180deg,var(--accent),var(--accent2));z-index:100;transition:height .1s; }
+
+/* Nav dots */
+.nav-dots { position:fixed;left:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px;z-index:50; }
+.nav-dot { width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:pointer;transition:all .3s;position:relative; }
+.nav-dot.active,.nav-dot:hover { background:var(--accent);transform:scale(1.4); }
+.nav-dot::after { content:attr(data-label);position:absolute;left:16px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:10px;color:var(--muted);white-space:nowrap;opacity:0;transition:opacity .2s;pointer-events:none; }
+.nav-dot:hover::after { opacity:1; }
+
+/* Layout */
+.wrap { position:relative;z-index:1;max-width:960px;margin:0 auto;padding:80px 28px 60px; }
+
+/* Hero */
+#hero { min-height:90vh;display:flex;flex-direction:column;justify-content:center; }
+
+.status-line { display:flex;align-items:center;gap:10px;margin-bottom:20px;opacity:0;animation:fadeUp .6s .1s forwards; }
+.dot-live { width:8px;height:8px;border-radius:50%;background:var(--success);box-shadow:0 0 0 0 rgba(74,222,128,.4);animation:ping 2s ease-in-out infinite; }
+@keyframes ping { 0%{box-shadow:0 0 0 0 rgba(74,222,128,.4)}70%{box-shadow:0 0 0 8px rgba(74,222,128,0)}100%{box-shadow:0 0 0 0 rgba(74,222,128,0)} }
+.status-txt { font-family:var(--mono);font-size:11px;color:var(--success);letter-spacing:2px;text-transform:uppercase; }
+
+.hero-name { font-family:var(--mono);font-size:clamp(56px,10vw,110px);font-weight:700;color:var(--text);line-height:.95;letter-spacing:-2px;margin-bottom:4px;opacity:0;animation:fadeUp .7s .2s forwards; }
+.hero-name .underscore { display:inline-block;animation:blink 1s step-end infinite;color:var(--accent); }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:0} }
+
+.hero-sub { font-family:var(--mono);font-size:clamp(13px,1.8vw,17px);color:var(--accent);letter-spacing:3px;margin-bottom:32px;opacity:0;animation:fadeUp .7s .35s forwards; }
+.hero-sub::before { content:'// ';color:var(--muted); }
+
+.hero-bio { font-size:clamp(15px,2vw,18px);color:var(--text2);line-height:1.9;max-width:580px;font-weight:300;margin-bottom:48px;opacity:0;animation:fadeUp .7s .5s forwards; }
+
+.hero-links { display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp .7s .65s forwards; }
+.hero-link { font-family:var(--mono);font-size:12px;text-decoration:none;padding:10px 24px;border-radius:3px;letter-spacing:1.5px;text-transform:uppercase;transition:all .25s;position:relative;overflow:hidden; }
+.hero-link:hover { transform:translateY(-2px); }
+.hl-primary { color:var(--accent);border:1px solid rgba(124,106,247,.4);background:rgba(124,106,247,.06); }
+.hl-secondary { color:var(--accent2);border:1px solid rgba(79,195,247,.3);background:rgba(79,195,247,.05); }
+.hl-ghost { color:var(--muted);border:1px solid var(--border2); }
+
+/* Stats */
+#stats { padding:80px 0; }
+.stats-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));border:1px solid var(--border);border-radius:6px;overflow:hidden; }
+.stat-item { padding:36px 24px;background:var(--surface);border-left:1px solid var(--border);text-align:center;position:relative;overflow:hidden;transition:background .3s; }
+.stat-item:first-child { border-left:none; }
+.stat-item::before { content:'';position:absolute;top:0;right:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform:scaleX(0);transform-origin:right;transition:transform .4s ease; }
+.stat-item:hover { background:var(--surface2); }
+.stat-item:hover::before { transform:scaleX(1); }
+.stat-num { font-family:var(--mono);font-size:clamp(32px,5vw,48px);font-weight:700;color:var(--accent);display:block;margin-bottom:8px;line-height:1; }
+.stat-lbl { font-size:13px;color:var(--muted); }
+
+/* Sections */
+.sec { padding:80px 0; }
+.sec-head { display:flex;align-items:center;gap:20px;margin-bottom:40px; }
+.sec-num { font-family:var(--mono);font-size:11px;color:var(--accent);opacity:.6;letter-spacing:2px; }
+.sec-title { font-size:26px;font-weight:700;color:var(--text); }
+.sec-code { font-family:var(--mono);font-size:12px;color:var(--muted);opacity:.7; }
+.sec-line { flex:1;height:1px;background:var(--border); }
+
+/* About */
+.about-box { background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:40px;position:relative;overflow:hidden; }
+.about-box::after { content:'';position:absolute;top:0;right:0;width:2px;height:100%;background:linear-gradient(180deg,var(--accent),transparent); }
+.about-corner { position:absolute;top:16px;left:20px;font-family:var(--mono);font-size:10px;color:var(--border2);letter-spacing:2px; }
+.about-text { font-size:17px;line-height:2;color:var(--text2);font-weight:300; }
+
+/* Skills */
+.skills-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden; }
+.skill-item { background:var(--surface);padding:20px 24px;transition:background .2s; }
+.skill-item:hover { background:var(--surface2); }
+.skill-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:10px; }
+.skill-name { font-family:var(--mono);font-size:13px;color:var(--text); }
+.skill-pct { font-family:var(--mono);font-size:11px;color:var(--accent); }
+.skill-track { height:3px;background:var(--border2);border-radius:2px;overflow:hidden; }
+.skill-fill { height:100%;border-radius:2px;background:linear-gradient(90deg,var(--accent-d),var(--accent),var(--accent2));width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1);box-shadow:0 0 8px rgba(124,106,247,.4); }
+
+/* Projects */
+.projects-list { display:grid;gap:12px; }
+.proj-card { display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:28px 32px;text-decoration:none;transition:all .25s;position:relative;overflow:hidden; }
+.proj-card::before { content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(124,106,247,.04),transparent);opacity:0;transition:opacity .3s; }
+.proj-card:hover { border-color:rgba(124,106,247,.35);transform:translateX(-6px); }
+.proj-card:hover::before { opacity:1; }
+.proj-index { font-family:var(--mono);font-size:11px;color:var(--border2);padding-top:4px;letter-spacing:1px; }
+.proj-name { font-family:var(--mono);font-size:16px;color:var(--text);font-weight:500;margin-bottom:8px; }
+.proj-desc { font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:16px;font-weight:300; }
+.tags { display:flex;gap:8px;flex-wrap:wrap; }
+.tag { font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:3px;background:rgba(124,106,247,.1);border:1px solid rgba(124,106,247,.2);color:rgba(124,106,247,.9); }
+.proj-arrow { color:var(--accent2);font-size:20px;padding-top:2px;transition:transform .25s; }
+.proj-card:hover .proj-arrow { transform:translate(3px,-3px); }
+
+/* Certs */
+.certs-list { display:grid;gap:16px; }
+.cert-card { display:grid;grid-template-columns:56px 1fr;gap:20px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:24px 28px;transition:border-color .25s; }
+.cert-card:hover { border-color:var(--border2); }
+.cert-icon { width:48px;height:48px;border-radius:8px;background:rgba(124,106,247,.08);border:1px solid rgba(124,106,247,.2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0; }
+.cert-title { font-family:var(--mono);font-size:14px;color:var(--text);margin-bottom:6px;font-weight:500; }
+.cert-meta { font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:10px;letter-spacing:1px; }
+.cert-desc { font-size:13px;color:var(--text2);line-height:1.7;font-weight:300; }
+
+/* Footer */
+footer { border-top:1px solid var(--border);padding:40px 0 20px;text-align:center; }
+.footer-name { font-family:var(--mono);font-size:13px;color:var(--muted);letter-spacing:3px;margin-bottom:8px; }
+.footer-copy { font-family:var(--mono);font-size:10px;color:var(--border2);letter-spacing:2px; }
+
+/* Animations */
+@keyframes fadeUp { from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease; }
+.reveal.visible { opacity:1;transform:translateY(0); }
+
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-thumb { background:var(--accent-d);border-radius:2px; }
+
+@media(max-width:640px) {
+  .wrap{padding:60px 18px 40px}
+  .nav-dots{display:none}
+  body{cursor:auto}
+  .cursor,.cursor-ring{display:none}
+  .proj-card{grid-template-columns:1fr;gap:12px;padding:20px}
+  .proj-index{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="scroll-bar" id="scrollBar"></div>
+
+<nav class="nav-dots">
+  <div class="nav-dot active" data-target="hero" data-label="home" onclick="goTo('hero')"></div>
+  {% if stats %}<div class="nav-dot" data-target="stats" data-label="stats" onclick="goTo('stats')"></div>{% endif %}
+  <div class="nav-dot" data-target="about" data-label="about" onclick="goTo('about')"></div>
+  {% if skills %}<div class="nav-dot" data-target="skills" data-label="skills" onclick="goTo('skills')"></div>{% endif %}
+  {% if projects %}<div class="nav-dot" data-target="projects" data-label="projects" onclick="goTo('projects')"></div>{% endif %}
+  {% if certs %}<div class="nav-dot" data-target="certs" data-label="certs" onclick="goTo('certs')"></div>{% endif %}
+</nav>
+
+<main class="wrap">
+
+  <!-- ── Hero ────────────────────────────────────────────────────────────── -->
+  <section id="hero">
+    {% if info.get('available') == 'true' %}
+    <div class="status-line">
+      <div class="dot-live"></div>
+      <span class="status-txt">Available for work</span>
+    </div>
+    {% endif %}
+
+    <h1 class="hero-name">{{ info.get('name','SAP1O') }}<span class="underscore">_</span></h1>
+    <div class="hero-sub">{{ info.get('title','Backend Developer') }}</div>
+    <p class="hero-bio">{{ info.get('tagline','') }}</p>
+
+    <div class="hero-links">
+      {% if info.get('github') %}<a href="{{ info.get('github') }}" target="_blank" rel="noreferrer" class="hero-link hl-secondary">GitHub ↗</a>{% endif %}
+      {% if info.get('telegram') %}<a href="{{ info.get('telegram') }}" target="_blank" rel="noreferrer" class="hero-link hl-primary">Telegram ↗</a>{% endif %}
+      {% if info.get('website') %}<a href="{{ info.get('website') }}" target="_blank" rel="noreferrer" class="hero-link hl-ghost">sadim.cloud ↗</a>{% endif %}
+    </div>
+  </section>
+
+  <!-- ── Stats ───────────────────────────────────────────────────────────── -->
+  {% if stats %}
+  <section id="stats" style="padding:0 0 80px">
+    <div class="stats-grid reveal">
+      {% for s in stats %}
+      <div class="stat-item">
+        <span class="stat-num">{{ s.value }}</span>
+        <div class="stat-lbl">{{ s.label }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- ── About ───────────────────────────────────────────────────────────── -->
+  <section id="about" class="sec">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">من أنا</h2>
+      <span class="sec-code">about()</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="about-box reveal">
+      <span class="about-corner">README.md</span>
+      <p class="about-text">{{ info.get('bio','') }}</p>
+    </div>
+  </section>
+
+  <!-- ── Skills ──────────────────────────────────────────────────────────── -->
+  {% if skills %}
+  <section id="skills" class="sec">
+    <div class="sec-head reveal">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">المهارات</h2>
+      <span class="sec-code">skills[]</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="skills-grid">
+      {% for s in skills %}
+      <div class="skill-item reveal" style="transition-delay:{{ loop.index0 * 60 }}ms">
+        <div class="skill-header">
+          <span class="skill-name">{{ s.name }}</span>
+          <span class="skill-pct">{{ s.level }}%</span>
+        </div>
+        <div class="skill-track">
+          <div class="skill-fill" data-width="{{ s.level }}"></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- ── Projects ────────────────────────────────────────────────────────── -->
+  {% if projects %}
+  <section id="projects" class="sec">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">المشاريع</h2>
+      <span class="sec-code">projects.live</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="projects-list">
+      {% for p in projects %}
+      <a href="{{ p.url or '#' }}" target="_blank" rel="noreferrer"
+         class="proj-card reveal" style="transition-delay:{{ loop.index0 * 80 }}ms">
+        <span class="proj-index">0{{ loop.index }}</span>
+        <div class="proj-body">
+          <div class="proj-name">{{ p.name }}</div>
+          <p class="proj-desc">{{ p.desc or '' }}</p>
+          {% if p.tags %}
+          <div class="tags">
+            {% for tag in p.tags.split(',') %}<span class="tag">{{ tag.strip() }}</span>{% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        <span class="proj-arrow">↗</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- ── Certificates ────────────────────────────────────────────────────── -->
+  {% if certs %}
+  <section id="certs" class="sec">
+    <div class="sec-head reveal">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">الشهادات والخبرات</h2>
+      <span class="sec-code">certificates[]</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="certs-list">
+      {% for c in certs %}
+      <div class="cert-card reveal" style="transition-delay:{{ loop.index0 * 80 }}ms">
+        <div class="cert-icon">🏅</div>
+        <div>
+          <div class="cert-title">{{ c.title }}</div>
+          <div class="cert-meta">{{ c.issuer }} · {{ c.date }}</div>
+          {% if c.desc %}<p class="cert-desc">{{ c.desc }}</p>{% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <footer>
+    <div class="footer-name">{{ info.get('name','SAP1O') }}</div>
+    <div class="footer-copy">SADIM NETWORK · 2025 · ALL RIGHTS RESERVED</div>
+  </footer>
+
+</main>
+
+<script>
+// Cursor
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='14px';cursor.style.height='14px';ring.style.width='48px';ring.style.height='48px';});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';});
+});
+
+// Scroll Progress
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('scrollBar').style.height=pct+'%';
+  updateDots();
+});
+
+// Nav Dots
+function goTo(id){ document.getElementById(id)?.scrollIntoView({behavior:'smooth'}); }
+function updateDots(){
+  document.querySelectorAll('.nav-dot').forEach(dot=>{
+    const sec=document.getElementById(dot.dataset.target);
+    if(!sec) return;
+    const r=sec.getBoundingClientRect();
+    if(r.top<=window.innerHeight/2 && r.bottom>=window.innerHeight/2){
+      document.querySelectorAll('.nav-dot').forEach(d=>d.classList.remove('active'));
+      dot.classList.add('active');
+    }
+  });
+}
+
+// Reveal on scroll
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.skill-fill').forEach(b=>b.style.width=b.dataset.width+'%');
+    }
+  });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+// Trigger skills already in view
+document.querySelectorAll('.skill-fill').forEach(b=>{
+  if(b.getBoundingClientRect().top<window.innerHeight) b.style.width=b.dataset.width+'%';
+});
+</script>
+</body>
+</html>

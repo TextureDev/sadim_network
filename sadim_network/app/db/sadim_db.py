@@ -105,10 +105,55 @@ def create_tables():
             cover_path TEXT NOT NULL
         );
     """)
+    #----------PROFILE TABLES----------#
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS profile (
+            id         SERIAL PRIMARY KEY,
+            key        VARCHAR(100) UNIQUE NOT NULL,
+            value      TEXT,
+            updated_at TIMESTAMP DEFAULT NOW()
+        );
+    """)
+ 
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS profile_stats (
+            id    SERIAL PRIMARY KEY,
+            label VARCHAR(100) NOT NULL,
+            value VARCHAR(100) NOT NULL
+        );
+    """)
+ 
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS profile_skills (
+            id    SERIAL PRIMARY KEY,
+            name  VARCHAR(100) NOT NULL,
+            level INTEGER CHECK (level BETWEEN 0 AND 100)
+        );
+    """)
+ 
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS profile_projects (
+            id          SERIAL PRIMARY KEY,
+            name        VARCHAR(200) NOT NULL,
+            description TEXT,
+            url         VARCHAR(500),
+            tags        VARCHAR(300)
+        );
+    """)
+ 
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS profile_certificates (
+            id          SERIAL PRIMARY KEY,
+            title       VARCHAR(200) NOT NULL,
+            issuer      VARCHAR(200),
+            date        VARCHAR(50),
+            description TEXT
+        );
+    """)
+ 
     conn.commit()
     cur.close()
     conn.close()
-
 
 
 

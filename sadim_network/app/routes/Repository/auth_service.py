@@ -19,3 +19,4 @@ def authenticate(email: str, password: str, role: str = None) -> User | None:
 def authenticate_admin(email: str, password: str) -> User | None:
     """""مصادقة المسؤول بناءً على البريد الإلكتروني وكلمة المرور"""
     return authenticate(email, password, role='admin')
+

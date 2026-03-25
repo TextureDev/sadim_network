@@ -20,7 +20,6 @@ Library_Agatha_bp = Blueprint(
     template_folder='templates',
     static_folder='static'
 )
-import os
 
 # نحدد مكان الملف الحالي
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -60,9 +59,9 @@ def agatha_christie():
 # =========================
 @Library_Agatha_bp.route('/library/increment_download/<int:book_id>', methods=['POST'])
 def increment_download(book_id):
-    if 'user_id' not in session:
-       flash("يجب تسجيل الدخول لتحميل الكتب.", "warning")
-       return redirect(url_for('loading_bp.login'))
+#    if 'user_id' not in session:
+#       flash("يجب تسجيل الدخول لتحميل الكتب.", "warning")
+#       return redirect(url_for('loading_bp.login'))
    
     conn = get_db_connection()
     cur = conn.cursor() # لا نحتاج RealDictCursor هنا لأننا سنعيد قيمة واحدة

@@ -6,20 +6,16 @@ from models.user import User
 from db.sadim_db import get_db_connection
 from app.limiter import limiter
 
-
 loading_bp = Blueprint('loading_bp', __name__)
 
-
-
 @loading_bp.route('/login')
-@limiter.limit("5 per minute")  # ✅
+@limiter.limit("5 per minute")  
 
 def login_page():
     return render_template(
         'auth/login.html',
         current_time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     )
-
 
 @loading_bp.route('/login', methods=['POST'])
 
@@ -95,6 +91,7 @@ def landing_page():
         current_time=current_time
     )
 
+
 @loading_bp.route("/account")
 def account():
     if 'user_id' not in session:
@@ -102,10 +99,12 @@ def account():
     user = User.get_by_id(session['user_id'])
     return render_template('account.html', user=user)
 
+
 @loading_bp.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('main.index'))
+
 
 @loading_bp.route("/account/settings", methods=['GET', 'POST'])
 def account_settings():
@@ -149,6 +148,7 @@ def account_settings():
 
     # GET request
     return render_template('account_settings.html', user=user)
+
 
 @loading_bp.route('/verify_email/<token>')
 def verify_email(token):
@@ -196,11 +196,9 @@ def verify_email(token):
         conn.commit()
         cur.close()
         conn.close()
-        
         # عرض صفحة نجاح التحقق
         return render_template('verify_success.html', login=url_for('loading_bp.login'))
         
     except Exception as e:
         print(f"❌ خطأ في التحقق من البريد: {e}")
         return render_template('verify_failure.html')
-
