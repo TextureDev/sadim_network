@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مكتبة أجاثا كريستي الملكية | سديم</title>
+    <title>مكتبة أجاثا</title>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Agatha.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
@@ -68,7 +68,17 @@
     </div>
     <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: {{ percent }}%;"></div></div>
 </section>
-
+<section style="max-width:700px; margin:2rem auto; padding:0 1rem;">
+    <h3 style="color:var(--soft-gold); font-family:'Amiri',serif; margin-bottom:1rem;">🏆 الأكثر تحميلاً</h3>
+    {% for book in books[:3] %}
+    <div style="display:flex; align-items:center; gap:1rem; padding:0.75rem 0; border-bottom:0.5px solid rgba(255,255,255,0.1);">
+        <span style="font-size:1.5rem; color:var(--soft-gold); min-width:30px;">#{{ loop.index }}</span>
+        <img src="{{ url_for('Library_Agatha.static', filename='uploads/' + book.cover_path) }}" style="width:45px; height:60px; object-fit:cover; border-radius:4px;">
+        <span style="flex:1; color:#eee;">{{ book.title }}</span>
+        <span style="color:var(--soft-gold); font-size:0.85rem;"><i class="fa-solid fa-cloud-arrow-down"></i> {{ book.download_count or 0 }}</span>
+    </div>
+    {% endfor %}
+</section>
 <div class="book-grid">
     {% for book in books %}
     <div class="book-card">
@@ -86,7 +96,9 @@
         <p style="font-size: 0.8rem; color: #ccc; margin-bottom: 15px; height: 3.2em; overflow: hidden; opacity: 0.7;">
             {{ book.desc_text | truncate(75) }}
         </p>
-        
+        <a href="{{ url_for('Library_Agatha.view_book', book_id=book['id']) }}">
+            عرض التفاصيل ←
+        </a>
         <a href="{{ url_for('Library_Agatha.download_file', book_id=book.id) }}" 
            class="btn-royal" 
            onclick="updateCount(event, {{ book.id }}, this.href)">
@@ -100,7 +112,7 @@
         <div class="source-icon"><i class="fa-solid fa-circle-info"></i></div>
         <div class="source-content">
             <h4>مصدر الكتب</h4>
-            <p>تم جلب هذه الكتب من موقع <a href="https://archive.org" target="_blank">archive.org</a> بموجب تراخيص المشاع الإبداعي. في حال وجود اعتراض، يرجى <a href="mailto:moslah20040@gmail.com">التواصل معنا</a>.</p>
+            <p>تم جلب هذه الكتب من موقع <a href="https://archive.org" target="_blank">archive.org</a> بموجب تراخيص المشاع الإبداعي. في حال وجود اعتراض، يرجى <a href="mailto:admin@sadim.cloud">التواصل معنا</a>.</p>
         </div>
     </div>
 </section>

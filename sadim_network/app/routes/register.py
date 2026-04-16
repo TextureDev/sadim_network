@@ -15,6 +15,8 @@ def show_registration_form():
     return render_template('auth/register.html')
 
 @register_bp.route('/register', methods=['POST'])
+@limiter.limit("5 per minute")
+
 def register_user():
 
     username = request.form.get('username')

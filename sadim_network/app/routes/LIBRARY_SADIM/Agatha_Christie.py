@@ -8,11 +8,12 @@ from flask import (
     request,
     flash
 )
+from app.limiter import limiter
 from app.db.sadim_db import get_db_connection
 import os
 from psycopg2.extras import RealDictCursor
 import psycopg2.extras
-
+from app.models.library_mdl import Library
 # إنشاء البلوبرينت مع تحديد مجلد الملفات الثابتة بشكل صريح
 Library_Agatha_bp = Blueprint(
     'Library_Agatha',
@@ -37,6 +38,8 @@ print(f"🎯 CORRECT PATH: {UPLOAD_FOLDER}")
 # عرض المكتبة للجمهور
 # =========================
 @Library_Agatha_bp.route('/library/agatha_christie')
+@limiter.limit("5 per minute")
+
 def agatha_christie():
     # التحقق من تسجيل الدخول (اختياري حسب رغبتك)
 #    if 'user_id' not in session:
@@ -45,8 +48,10 @@ def agatha_christie():
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
+
     # جلب جميع الكتب لعرضها
-    cur.execute("SELECT * FROM books ORDER BY id DESC;")
+    cur.execute("SELECT * FROM books ORDER BY download_count DESC NULLS LAST;")
+
     books = cur.fetchall()
     
     cur.close()
@@ -83,7 +88,15 @@ def increment_download(book_id):
     finally:
         cur.close()
         conn.close()
+@Library_Agatha_bp.route("/Library/Agatha_Christie/<int:book_id>")
+@limiter.limit("5 per minute")
+def view_book(book_id):
+    book = Library.get_book_id(book_id)
 
+    if not book:
+        return "الكتاب غير موجود", 404
+
+    return render_template("Agatha Christie/Book_detail.html", book=book)
 # =========================
 # 2. تحميل الملف الفعلي (بدون تحديث العداد هنا)
 # =========================

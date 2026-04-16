@@ -25,7 +25,7 @@ class Library:
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
-        cur.execute("SELECT cover_path, pdf_path FROM books WHERE id=%s", (book_id,))
+        cur.execute("SELECT id, cover_path, pdf_path FROM books WHERE id=%s", (book_id,))
         book = cur.fetchone() # جلب مسارات الملفات القديمة من قاعدة البيانات
 
         conn.commit()
@@ -33,6 +33,7 @@ class Library:
         conn.close()
         return book
     @staticmethod
+
     def edit_book(title, desc, cover_name, pdf_name, book_id):
         conn = get_db_connection()
         cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -55,3 +56,17 @@ class Library:
         conn.commit()
         cur.close()
         conn.close()
+
+
+    @staticmethod
+    def get_all_books():
+        """جلب جميع الكتب من قاعدة البيانات"""
+        """عرض الكتب في لوحة التحكم"""
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute("SELECT * FROM books ORDER BY id DESC;")
+        books = cur.fetchall()
+        cur.close()
+        conn.close()
+        return books
+

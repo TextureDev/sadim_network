@@ -2,7 +2,6 @@ from flask import Flask, render_template
 from app import config
 from app.limiter import limiter
 
-
 app = Flask(__name__)
 app.config.from_object('app.config.settings')
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 ميجا

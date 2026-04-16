@@ -212,7 +212,7 @@ class User:
 
     # ---------- INTERNAL MAPPER ----------
     @staticmethod
-    def _row_to_user(row):
+    def _row_to_user(row): # هذه الدالة يظهر أن هناك مشكلة في تنسيق التاريخ في قاعدة البيانات، لذلك تم تعديلها للتأكد من تحويل النص إلى كائن datetime بشكل صحيح.
         if not row:
             return None
     

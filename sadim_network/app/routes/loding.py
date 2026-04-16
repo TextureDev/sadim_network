@@ -18,6 +18,7 @@ def login_page():
     )
 
 @loading_bp.route('/login', methods=['POST'])
+@limiter.limit("5 per minute")  
 
 def login():
     try:
@@ -41,7 +42,7 @@ def login():
         # بعد التحقق من المستخدم ونجاح تسجيل الدخول
         user.last_login = datetime.now()
 
-        user_update.update_user(user)
+        User.update_user(user)  # تأكد من أن update_user تقوم بتحديث last_login في قاعدة البيانات
 
         
 

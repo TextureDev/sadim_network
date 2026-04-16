@@ -16,6 +16,7 @@ import pytz
 @login_required
 @admin_required
 def services_dashboard():
+    
     username = session.get('username', 'ضيف')
 
     current_time, greeting = Timezone.get_time_and_greeting()
@@ -32,7 +33,9 @@ def services_dashboard():
 # ------------------ صفحة عرض جميع الخدمات ------------------
 @admin_bp.route('/services')
 def show_services():
-
+    if 'user_id' not in session:
+        flash("يرجى تسجيل الدخول للوصول إلى الخدمات.", "warning")
+        return redirect(url_for('loading_bp.login_page'))
     
     books = service.get_all_books()
     tech_tools = service.get_all_tech_tools()

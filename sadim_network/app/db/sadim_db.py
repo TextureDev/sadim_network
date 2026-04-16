@@ -34,7 +34,7 @@ def create_tables():
             password_hash VARCHAR(260) NOT NULL,
             role VARCHAR(20) DEFAULT 'user', -- admin / user
             profile_image TEXT,
-            last_login TIMESTAMP,
+            last_login TIMESTAMP, 
             status VARCHAR(20) DEFAULT 'active', -- active / suspended / deleted
             is_verified BOOLEAN DEFAULT FALSE, -- تحقق البريد
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -42,7 +42,58 @@ def create_tables():
         );
     """)
 
+# ---------جدول المستخدمين بالبوت---------#
+    cur.execute('''
+            CREATE TABLE IF NOT EXISTS users_bot (
+                id BIGINT PRIMARY KEY,  -- Telegram user_id
+                username VARCHAR(100),
+                first_name VARCHAR(100),
+                is_active BOOLEAN DEFAULT TRUE,
+                joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+    
+    cur.execute('''
+            CREATE TABLE IF NOT EXISTS channels (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(150) NOT NULL,
+                invite_link TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        ''')
+    
 
+    cur.execute('''
+            CREATE TABLE IF NOT EXISTS broadcasts (
+            id SERIAL PRIMARY KEY,
+            sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            total_users INTEGER,
+            success_count INTEGER,
+            failed_count INTEGER,
+            message_preview TEXT,
+            message TEXT
+           );
+        ''')
+    
+    cur.execute('''
+            CREATE TABLE IF NOT EXISTS broadcast_receivers (
+                id SERIAL PRIMARY KEY,
+                broadcast_id INTEGER REFERENCES broadcasts(id) ON DELETE CASCADE,
+                user_id BIGINT REFERENCES users_bot(id) ON DELETE CASCADE,
+                status VARCHAR(20), -- success / failed
+                error_message TEXT,
+                sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            ); 
+        ''')
+    cur.execute('''
+            CREATE TABLE IF NOT EXISTS user_channels (
+                user_id BIGINT REFERENCES users_bot(id) ON DELETE CASCADE,
+                channel_id INTEGER REFERENCES channels(id) ON DELETE CASCADE,
+                joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (user_id, channel_id)
+            );    
+        ''')
+               
 #----------services TABLE----------#
     cur.execute("""
        CREATE TABLE IF NOT EXISTS services (

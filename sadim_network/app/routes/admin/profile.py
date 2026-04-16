@@ -10,6 +10,12 @@ profile_bp = Blueprint('profile_bp', __name__, url_prefix='/admin')
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+# أضف هذه الدالة في قسم الـ Helpers في بداية الملف
+def is_bot(user_agent):
+    """التحقق مما إذا كان الزائر بوت أو زاحف ويب لضمان دقة الإحصائيات"""
+    bots = ['bot', 'spider', 'crawl', 'facebookexternalhit', 'snapchat', 'whatsapp', 'preview']
+    user_agent = user_agent.lower()
+    return any(bot in user_agent for bot in bots)
 
 def get_profile():
     conn = get_db_connection()
@@ -295,8 +301,32 @@ def profile_cert_delete(cert_id):
 
 # ── Public Page ───────────────────────────────────────────────────────────────
 
+# ── Public Page ───────────────────────────────────────────────────────────────
+
 @profile_bp.route('/profile/view')
 def profile_public():
+    user_agent = request.headers.get('User-Agent', '')
+
+    # 1. تحديث العداد فقط إذا لم يكن الزائر بوت
+    if not is_bot(user_agent):
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            # 2. تحديث عداد المشاهدات في جدول profile_stats
+            # استخدمنا COALESCE للتعامل مع الحالة التي قد لا يكون فيها الحقل موجوداً أو فارغاً
+            cur.execute("""
+                UPDATE profile_stats 
+                SET value = (COALESCE(NULLIF(value, ''), '0')::INTEGER + 1)::TEXT 
+                WHERE label = 'views';
+            """)
+            conn.commit()
+            cur.close()
+            conn.close()
+        except Exception as e:
+            # نسجل الخطأ في السيرفر لكن لا نعطل عرض الصفحة للمستخدم
+            print(f"Error updating views: {e}")
+
+    # 3. عرض الصفحة مع البيانات المحدثة
     return render_template('profile/profiles.html',
         info=get_profile(), stats=get_stats(),
         skills=get_skills(), projects=get_projects(), certs=get_certs()
