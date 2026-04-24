@@ -69,59 +69,51 @@ closeSidebar.addEventListener('click', hideSidebar);
 overlay.addEventListener('click', hideSidebar);
 
     </script>
+
 <main class="services-layout">
 
-    <!-- قسم الكتب -->
     <section>
         <div class="section-banner banner-classic">
-            <h2 style="color: var(--classic-gold);">📜   الادببيات </h2>
+            <h2 style="color: var(--classic-gold);">📜 الادبيات</h2>
             <p>كتب برمجية، فلسفية، وأدلة تقنية حصرية.</p>
         </div>
 
         <div class="cards-grid">
             {% for book in books %}
-            {% set target_url =
-                book.download_url
-                if book.download_url
-                else 'https://wa.me/966542980920?text=طلب كتاب: ' ~ book.title
-            %}
+            {% set target_url = book.download_url if book.download_url else 'https://t.me/SAP1O?text=طلب كتاب: ' ~ book.title %}
             <div class="nebula-card">
-
                 <span class="category-tag">كتاب</span>
-
-                <img
-                    src="{{ url_for('static', filename=book.image_url or 'uploads/default.jpg') }}"
-                    alt="{{ book.title }}">
-
-                 <h3>{{ book.title }}</h3>
-                 <p>{{ book.description }}</p>
+                <img src="{{ url_for('static', filename=book.image_url or 'uploads/default.jpg') }}" alt="{{ book.title }}">
                 
+                <h3>{{ book.title }}</h3>
+                <p>{{ book.description }}</p>
 
                 <p class="price-text gold-text">
                     {{ 'مجاني' if book.price == 0 else book.price ~ ' ر.س' }}
                 </p>
 
-                <div class="action-area">
+                <div class="action-area" style="display: flex; flex-direction: column; gap: 8px;">
                     <a href="{{ target_url }}"
-                       class="btn-nebula {% if book.download_url %}btn-free{% else %}btn-wa{% endif %}"
+                       class="btn-nebula {% if book.download_url %}btn-free{% else %}btn-tg{% endif %}"
                        target="_blank">
                         {% if book.download_url %}
-                            الانتقال إلى الكتاب
+                            <i class="fas fa-external-link-alt"></i>&nbsp; الانتقال إلى الكتاب
                         {% else %}
-                            طلب عبر واتساب
+                            <i class="fab fa-telegram-plane"></i>&nbsp; طلب عبر التليغرام
                         {% endif %}
                     </a>
 
-                    <a href="{{ target_url }}"
-                       class="btn-nebula btn-share"
-                       target="_blank">🔗</a>
+                    <a href="{{ url_for('admin.service_detail', type='book', item_id=book.id) }}" 
+                       class="btn-details" 
+                       style="text-align: center; font-size: 13px; color: var(--color-light); text-decoration: none; padding: 5px; border: 1px solid rgba(223, 182, 178, 0.1); border-radius: 5px; transition: 0.3s;">
+                        <i class="fas fa-info-circle"></i> عرض التفاصيل
+                    </a>
                 </div>
             </div>
             {% endfor %}
         </div>
     </section>
 
-    <!-- قسم الأدوات التقنية -->
     <section>
         <div class="section-banner banner-tech">
             <h2 style="color: var(--tech-cyan);">التقنية</h2>
@@ -130,18 +122,10 @@ overlay.addEventListener('click', hideSidebar);
 
         <div class="cards-grid">
             {% for tool in tech_tools %}
-            {% set target_url =
-                tool.download_url
-                if tool.download_url
-                else 'https://wa.me/966542980920?text=طلب أداة: ' ~ tool.title
-            %}
+            {% set target_url = tool.download_url if tool.download_url else 'https://t.me/SAP1O?text=طلب أداة: ' ~ tool.title %}
             <div class="nebula-card">
-
                 <span class="category-tag">أداة</span>
-
-                <img
-                    src="{{ url_for('static', filename=tool.image_url or 'uploads/default.jpg') }}"
-                    alt="{{ tool.title }}">
+                <img src="{{ url_for('static', filename=tool.image_url or 'uploads/default.jpg') }}" alt="{{ tool.title }}">
 
                 <h3>{{ tool.title }}</h3>
                 <p>{{ tool.description }}</p>
@@ -150,20 +134,22 @@ overlay.addEventListener('click', hideSidebar);
                     {{ 'مجاني' if tool.price == 0 else tool.price ~ ' ر.س' }}
                 </p>
 
-                <div class="action-area">
+                <div class="action-area" style="display: flex; flex-direction: column; gap: 8px;">
                     <a href="{{ target_url }}"
-                       class="btn-nebula {% if tool.download_url %}btn-free{% else %}btn-wa{% endif %}"
+                       class="btn-nebula {% if tool.download_url %}btn-free{% else %}btn-tg{% endif %}"
                        target="_blank">
                         {% if tool.download_url %}
-                            الانتقال إلى الأداة
+                            <i class="fas fa-download"></i>&nbsp; الانتقال إلى الأداة
                         {% else %}
-                            طلب عبر واتساب
+                            <i class="fab fa-telegram-plane"></i>&nbsp; طلب عبر التليغرام
                         {% endif %}
                     </a>
 
-                    <a href="{{ target_url }}"
-                       class="btn-nebula btn-share"
-                       target="_blank">🔗</a>
+                    <a href="{{ url_for('admin.service_detail', type='tool', item_id=tool.id) }}" 
+                       class="btn-details"
+                       style="text-align: center; font-size: 13px; color: var(--color-light); text-decoration: none; padding: 5px; border: 1px solid rgba(223, 182, 178, 0.1); border-radius: 5px; transition: 0.3s;">
+                        <i class="fas fa-info-circle"></i> عرض التفاصيل
+                    </a>
                 </div>
             </div>
             {% endfor %}

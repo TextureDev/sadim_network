@@ -421,3 +421,35 @@ body {
     align-items: center;
     justify-content: center;
 }
+/* زر التليغرام الجديد */
+.btn-tg {
+    background: #0088cc !important;
+    color: white !important;
+    flex: 1;
+    text-align: center;
+    padding: 0.7rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-tg:hover {
+    background: #0099e6 !important;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 136, 204, 0.4);
+}
+
+/* تنسيق الأيقونة داخل الزر */
+.btn-nebula i {
+    font-size: 1.1rem;
+}
+.btn-details:hover {
+    background: rgba(223, 182, 178, 0.05);
+    border-color: var(--color-accent) !important;
+    color: var(--color-deep) !important;
+}

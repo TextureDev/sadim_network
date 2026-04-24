@@ -29,10 +29,11 @@ APP_URL = os.getenv("APP_URL")
 # ===== إعدادات البريد =====
 EMAIL_USER = os.getenv("EMAIL_USER")
 EMAIL_PASS = os.getenv("EMAIL_PASS")
-EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.hostinger.com")
+EMAIL_HOST = os.getenv("EMAIL_HOST", "smtp.resend.com")
 EMAIL_PORT = int(os.getenv("EMAIL_PORT", 587))
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "True") == "True"
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False") == "True"
+EMAIL_SENDER = os.getenv("EMAIL_SENDER")
 EMAIL_DEFAULT_SENDER = EMAIL_USER
 
 # ===== إعدادات البوت =====

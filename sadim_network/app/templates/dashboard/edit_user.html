@@ -15,6 +15,16 @@
     </h2>
     
     <form method="POST">
+        <div class="info-item">
+            <span class="info-label">صورة الملف الشخصي</span>
+            <span class="info-value">
+                {% if user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}?v=1" width="80" style="border-radius: 50%;">
+                {% else %}
+                    <img src="{{ url_for('static', filename='uploads/default.png') }}" width="80" style="border-radius: 50%;">
+                {% endif %}
+            </span>
+        </div>
         <div class="nebula-form-group">
             <label for="name"><i class="fas fa-id-card"></i> الاسم الكامل</label>
             <input type="text" class="nebula-input" id="name" name="name" value="{{ user.name }}" required>
@@ -26,8 +36,8 @@
         </div>
 
         <div class="nebula-form-group">
-            <label for="password"><i class="fas fa-lock"></i> كلمة المرور الجديدة</label>
-            <input type="password" class="nebula-input" id="password" name="password" placeholder="اتركها فارغة لعدم التغيير">
+            <label for="password_hash"><i class="fas fa-lock"></i> كلمة المرور الجديدة</label>
+            <input type="password" class="nebula-input" id="password_hash" name="password_hash" value="{{ user.password_hash }}" placeholder="اتركها فارغة لعدم التغيير">
         </div>
 
         <div class="nebula-form-group">

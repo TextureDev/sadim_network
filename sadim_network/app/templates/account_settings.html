@@ -4,35 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/account_settings.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <title>سديم | تعديل الحساب</title>
-
-
 </head>
 
 <body>
     <div class="container">
         <h2>تعديل الحساب</h2>
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
+            
+            <div class="avatar-section">
+                <div class="avatar-ring">
+                    {% if user.profile_image %}
+                        <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}?v=1" alt="الصورة الشخصية">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='uploads/default.png') }}" alt="الصورة الافتراضية">
+                    {% endif %}
+                    
+                    <label for="profile_image" class="edit-badge" title="تغيير الصورة">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                </div>
+                <input type="file" id="profile_image" name="profile_image" accept="image/*" style="display: none;">
+                <span class="avatar-hint">اضغط على الكاميرا لتغيير صورتك</span>
+            </div>
+
             <div class="form-item">
                 <label class="input-label" for="name">الاسم</label>
-                <input type="text" id="name" name="name" value="{{ user.username }}" required>
+                <div class="field-inner">
+                    <i class="fas fa-user field-icon"></i>
+                    <input type="text" id="name" name="name" value="{{ user.username }}" required>
+                </div>
             </div>
 
             <div class="form-item">
                 <label class="input-label" for="email">البريد الإلكتروني</label>
-                <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                <div class="field-inner">
+                    <i class="fas fa-envelope field-icon"></i>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
             </div>
+
+            <div class="section-divider"></div>
 
             <label class="delete-section" for="delete_account">
                 <input type="checkbox" name="delete_account" id="delete_account">
                 <span><i class="fas fa-trash-alt"></i> أرغب في حذف الحساب نهائياً</span>
             </label>
 
-            <button type="submit">حفظ التغييرات</button>
+            <button type="submit" class="btn-save">حفظ التغييرات</button>
         </form>
 
         <a class="back-link" href="{{ url_for('loading_bp.account') }}">

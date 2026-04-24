@@ -20,10 +20,17 @@
             </div>
 
             <ul class="nav-menu">
-                <li class="greeting-text">{{ username }}</li>
-                <li><a href="{{ url_for('loading_bp.account') }}">حسابي</a></li>
+                <li class="user-profile-item">
+                    <a href="{{ url_for('loading_bp.account') }}" class="profile-link">
+                        <span class="greeting-text">{{ username }}</span>
+                        <div class="profile-pic-wrapper">
+                         {% set profile_img = user.profile_image if user.profile_image else 'default_user.png' %}
+                         <img src="{{ url_for('static', filename='uploads/' + profile_img) }}?v=1" ...>
+                        </div>
+                    </a>
+                </li>
+            
                 <li><a href="{{ url_for('Library_Agatha.agatha_christie') }}">مكتبة أجاثا</a></li>
-
                 <li><a href="{{ url_for('admin.show_services') }}">خدماتنا</a></li>
                 <li><a href="{{ url_for('main.about') }}">من نحن</a></li>
                 <li><a href="mailto:admin@sadim.cloud" class="btn-primary">اتصل بنا</a></li>
@@ -37,7 +44,15 @@
     <div id="mobile-sidebar" class="mobile-sidebar">
         <button id="close-sidebar">×</button>
         <ul class="mobile-nav-links">
-            <li class="greeting-text">{{ username }}</li>
+            <li class="user-profile-item">
+                    <a href="{{ url_for('loading_bp.account') }}" class="profile-link">
+                        <span class="greeting-text">{{ username }}</span>
+                        <div class="profile-pic-wrapper">
+                         {% set profile_img = user.profile_image if user.profile_image else 'default_user.png' %}
+                         <img src="{{ url_for('static', filename='uploads/' + profile_img) }}?v=1" alt="Profile">
+                        </div>
+                    </a>
+            </li>
             <li><a href="{{ url_for('loading_bp.account') }}">حسابي</a></li>
             <li><a href="{{ url_for('Library_Agatha.agatha_christie') }}">مكتبة أجاثا</a></li>
             <li><a href="{{ url_for('admin.show_services') }}">خدماتنا</a></li>

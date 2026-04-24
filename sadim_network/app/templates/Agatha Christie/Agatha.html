@@ -9,7 +9,75 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;700&family=Tajawal:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
+<style>
+    /* الحاوية الخارجية للصورة */
+.profile-pic-wrapper {
+    width: 50px;           /* يمكنك تكبير أو تصغير الحجم من هنا */
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;      /* لإخفاء أي أجزاء خارج الدائرة */
+    border-radius: 50%;    /* جعل الحاوية دائرية */
+    border: 2px solid var(--gold, #d4af37); /* إطار ذهبي خفيف ليناسب طابع أجاثا */
+    background-color: #f0f0f0;
+}
 
+/* الصورة نفسها داخل الحاوية */
+.sidebar-profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;     /* أهم خاصية: تجعل الصورة تملأ الدائرة دون تمطط */
+    object-position: center; /* التركيز على وسط الصورة */
+}
+
+/* تنسيق الرابط ليظهر الاسم والصورة بجانب بعض بشكل متناسق */
+.profile-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* لتوزيع الاسم والصورة على الأطراف */
+    padding: 10px 15px;
+    text-decoration: none;
+    width: 100%;
+}
+
+.greeting-text {
+    font-weight: bold;
+    color: var(--text-primary, #333);
+    margin-left: 10px;      /* مسافة بين الاسم والصورة */
+}
+.user-action {
+    display: flex;
+    align-items: center;
+}
+
+.header-profile-link {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* مسافة بين الاسم والصورة */
+    text-decoration: none;
+}
+
+.header-username {
+    color: var(--soft-gold, #f1c40f);
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.profile-pic-wrapper-header {
+    width: 38px;  /* حجم أصغر قليلاً ليناسب الهيدر */
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 1.5px solid var(--soft-gold, #f1c40f);
+}
+
+.header-profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+</style>
 </head>
 <body>
 
@@ -35,15 +103,25 @@
         <span class="top">SADEEM</span>
         <span class="sub">ROYAL LIBRARY</span>
     </a>
+    
     <ul class="nav-links-desktop">
         <li><a href="{{ url_for('main.index') }}">الرئيسية</a></li>
-
         <li><a href="{{url_for('admin.show_services')}}">خدماتنا</a></li>
         <li><a href="{{url_for('main.about')}}">من نحن</a></li>
     </ul>
+
     <div class="user-action">
         {% if session.user_id %}
-            <a href="{{ url_for('loading_bp.account') }}" style="color: var(--soft-gold);"><i class="fa-regular fa-circle-user fa-xl"></i></a>
+            <a href="{{ url_for('loading_bp.account') }}" class="header-profile-link">
+                <span class="header-username">{{ user.username }}</span>
+                
+                <div class="profile-pic-wrapper-header">
+                    {% set profile_img = user.profile_image if user.profile_image else 'default_user.png' %}
+                    <img src="{{ url_for('static', filename='uploads/' + profile_img) }}?v=1" 
+                         alt="Profile" 
+                         class="header-profile-img">
+                </div>
+            </a>
         {% else %}
             <a href="{{ url_for('loading_bp.login') }}" class="btn-royal" style="padding: 6px 20px;">دخول</a>
         {% endif %}

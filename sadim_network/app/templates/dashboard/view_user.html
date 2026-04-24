@@ -119,6 +119,16 @@
 
     <div class="info-grid">
         <div class="info-item">
+            <span class="info-label">صورة الملف الشخصي</span>
+            <span class="info-value">
+                {% if user.profile_image %}
+                    <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}?v=1" width="80" style="border-radius: 50%;">
+                {% else %}
+                    <img src="{{ url_for('static', filename='uploads/default.png') }}" width="80" style="border-radius: 50%;">
+                {% endif %}
+            </span>
+        </div>
+        <div class="info-item">
             <span class="info-label">المعرف الرقمي (ID)</span>
             <span class="info-value">#{{ user.id }}</span>
         </div>

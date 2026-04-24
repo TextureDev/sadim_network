@@ -7,6 +7,7 @@ from app.db.sadim_db import get_db_connection
 from utlis.login_required import login_required
 from utlis.permissions import admin_required
 from datetime import datetime
+from app.models.comments import Comments
 admin_bp = Blueprint('admin', __name__, url_prefix='/dashboard', template_folder='../../templates')
 
 
@@ -58,4 +59,28 @@ def dashboard_users():
         offline_users=offline_users,
         stats=stats
     )
+
+@admin_bp.route('/manage/comments', methods=['GET', 'POST'])
+@login_required
+def manage_comments():
+    # التأكد أن من يدخل هنا هو أدمن فقط
+    if session.get('role') != 'admin':
+        flash('غير مصرح لك بالدخول', 'danger')
+        return redirect(url_for('loading_bp.landing_page'))
+
+    if request.method == 'POST':
+        comment_id = request.form.get('comment_id')
+        user_id = session.get('user_id')
+        user_role = session.get('role', 'user') # توحيد المسمى مع الـ session
+
+        if Comments.delete_comment(comment_id, user_id, user_role):
+            flash('تم حذف التعليق بنجاح', 'success')
+        else:
+            flash('فشل حذف التعليق أو لا تملك الصلاحية.', 'danger')
+
+        # تأكد أن اسم الـ blueprint هنا يطابق ما عرفته في الـ __init__.py
+        return redirect(url_for('admin.manage_comments')) 
+
+    comments = Comments.get_all_comments()
+    return render_template('dashboard/comments_dashboard.html', comments=comments)
 from app.routes.admin import users, visits, services, library

@@ -33,9 +33,9 @@ def services_dashboard():
 # ------------------ صفحة عرض جميع الخدمات ------------------
 @admin_bp.route('/services')
 def show_services():
-    if 'user_id' not in session:
-        flash("يرجى تسجيل الدخول للوصول إلى الخدمات.", "warning")
-        return redirect(url_for('loading_bp.login_page'))
+#    if 'user_id' not in session:
+#        flash("يرجى تسجيل الدخول للوصول إلى الخدمات.", "warning")
+#        return redirect(url_for('loading_bp.login_page'))
     
     books = service.get_all_books()
     tech_tools = service.get_all_tech_tools()
@@ -125,3 +125,14 @@ def delete_service(service_id):
     service.delete_service(service_id)
     flash('تم حذف الخدمة بنجاح!', 'danger')
     return redirect(url_for('admin.services_dashboard'))
+
+@admin_bp.route('/service/<string:type>/<int:item_id>')
+def service_detail(type, item_id):
+    item = None
+    if type == 'book':
+        item = service.get_book_by_id(item_id) # افترضت اسم النموذج Book
+    elif type == 'tool':
+        item = service.get_tool_by_id(item_id) # افترضت اسم النموذج TechTool
+
+    return render_template('dashboard/s.html', item=item, type=type)
+

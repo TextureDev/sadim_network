@@ -16,19 +16,18 @@
     <div class="container">
         <h2>حسابي</h2>
         <div class="profile-pic-wrapper">
+         {% if user.profile_image %}
+             <img src="{{ url_for('static', filename='uploads/' + user.profile_image) }}?v=1" width="150">
+         {% else %}
+             <img src="{{ url_for('static', filename='uploads/default.png') }}" width="150">
+         {% endif %}
 
-         <img class="profile-pic" 
-         src="data:image/svg+xml;utf8,
-           <svg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'>
-             <circle cx='150' cy='150' r='140' fill='%23052c25' stroke='%23c9a66b' stroke-width='12'/>
-             <circle cx='150' cy='110' r='55' fill='%23c9a66b'/>
-             <path d='M60 250 Q150 180 240 250' fill='%23c9a66b'/>
-           </svg>">
         </div>
 
         <div class="profile-info">
             <p><strong>الاسم:</strong> {{ user.username }}</p>
             <p><strong>الإيميل:</strong> {{ user.email }}</p>
+            </p>
         </div>
 
         <div class="btn-container">

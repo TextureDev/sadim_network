@@ -1,3 +1,6 @@
+import os
+from app.routes.shared import UPLOAD_FOLDER, allowed_file, BASE_DIR, ALLOWED_EXTENSIONS
+
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 import pytz
 from datetime import datetime
@@ -5,7 +8,9 @@ from routes.Repository import user_update
 from models.user import User
 from db.sadim_db import get_db_connection
 from app.limiter import limiter
-
+from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename
+from PIL import Image
 loading_bp = Blueprint('loading_bp', __name__)
 
 @loading_bp.route('/login')
@@ -65,11 +70,11 @@ def login():
 def landing_page():
     if 'user_id' not in session:
         return redirect(url_for('loading_bp.login'))
-
+ 
 
     # اسم المستخدم من session
     username = session.get('username', 'ضيف')
-
+    user = User.get_by_id(session['user_id'])
     # الوقت الحالي حسب منطقتك
     tz = pytz.timezone("Africa/Tripoli")
     now = datetime.now(tz)
@@ -89,14 +94,15 @@ def landing_page():
         'landing.html',
         username=username,
         greeting=greeting,
-        current_time=current_time
+        current_time=current_time,
+        user=user
     )
 
 
 @loading_bp.route("/account")
 def account():
     if 'user_id' not in session:
-        return redirect(url_for('login.login'))
+        return redirect(url_for('loading_bp.login'))
     user = User.get_by_id(session['user_id'])
     return render_template('account.html', user=user)
 
@@ -118,9 +124,16 @@ def account_settings():
         # معالجة تحديث الإعدادات
         name = request.form.get('name')
         email = request.form.get('email')
+        profile_image = request.files.get('profile_image')
         user.username = name
         user.email = email
-        
+        if profile_image and profile_image.filename != "":
+            filename = secure_filename(profile_image.filename)
+            filepath = os.path.join(UPLOAD_FOLDER, filename)
+    
+            profile_image.save(filepath)
+            user.profile_image = filename  # ✔ نخزن الاسم  
+        user.update_user()      
         if delete := request.form.get('delete_account'):
             # معالجة حذف الحساب
             User.delete(user.id)

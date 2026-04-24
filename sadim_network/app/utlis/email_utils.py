@@ -20,7 +20,7 @@ def send_verification_email(to_email, token):
     # 1. إنشاء الرسالة وتجهيز الـ Headers بنفس الطريقة الناجحة
     msg = MIMEMultipart('alternative')
     msg['Subject'] = subject
-    msg['From'] = settings.EMAIL_USER  # استخدمنا البريد مباشرة كما في الكود الناجح
+    msg['From'] = settings.EMAIL_SENDER  # القيمة الصحيحة: "no-reply@sadim.cloud"  # استخدمنا البريد مباشرة كما في الكود الناجح
     msg['To'] = to_email
 
     # 2. قالب الـ HTML الاحترافي

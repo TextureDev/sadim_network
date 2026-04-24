@@ -156,6 +156,40 @@ def create_tables():
             cover_path TEXT NOT NULL
         );
     """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS posts (
+          id SERIAL PRIMARY KEY,
+          user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+          title VARCHAR(200) NOT NULL,
+          content TEXT NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
+#----------COMMENTS TABLE----------#
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS comments (
+            id SERIAL PRIMARY KEY,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+            book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
+            content TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+    """)
+
+#----------COMMENT LIKES TABLE----------#
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS comment_likes (
+            id SERIAL PRIMARY KEY,
+            comment_id INTEGER REFERENCES comments(id) ON DELETE CASCADE,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            UNIQUE(comment_id, user_id)  -- يمنع اللايك مرتين
+        );
+    """)
+
+
     #----------PROFILE TABLES----------#
     cur.execute("""
         CREATE TABLE IF NOT EXISTS profile (

@@ -181,6 +181,7 @@ class User:
                 email=%s,
                 password_hash=%s,
                 role=%s,
+                profile_image=%s,
                 last_login=%s,
                 is_verified=%s,
                 updated_at=%s
@@ -193,6 +194,7 @@ class User:
             self.email,
             self.password_hash,
             self.role,
+            self.profile_image,
             self.last_login,
             self.is_verified,
             datetime.now(),

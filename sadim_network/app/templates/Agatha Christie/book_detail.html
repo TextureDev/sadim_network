@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
-  <title>{{ book.title }} | المكتبة الملكية</title>
+  <title>{{ book.title }} | SADEEM</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -83,7 +83,7 @@
     .container {
       position: relative;
       z-index: 1;
-      max-width: 900px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 3rem 2rem;
     }
@@ -95,17 +95,30 @@
       align-items: start;
     }
 
+    @media (min-width: 1000px) {
+      .book-layout {
+        grid-template-columns: 220px 1fr 320px;
+        gap: 2.5rem;
+      }
+      
+      .comment-area {
+        margin-top: 0;
+        border-top: none;
+        border-right: 0.5px solid var(--border);
+        padding-right: 1.5rem;
+        height: fit-content;
+        position: sticky;
+        top: 2rem;
+      }
+    }
+
     @media (max-width: 600px) {
       .book-layout { grid-template-columns: 1fr; gap: 2rem; }
       .cover-wrap { text-align: center; }
     }
 
     /* COVER */
-    .cover-wrap {
-      position: sticky;
-      top: 2rem;
-    }
-
+    .cover-wrap { position: sticky; top: 2rem; }
     .cover-wrap img {
       width: 100%;
       max-width: 220px;
@@ -129,12 +142,7 @@
     }
 
     /* CONTENT */
-    .book-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
+    .book-meta { display: flex; flex-direction: column; gap: 0; }
     .book-author {
       font-size: 13px;
       color: var(--gold);
@@ -142,7 +150,6 @@
       margin-bottom: 0.5rem;
       text-transform: uppercase;
     }
-
     .book-title {
       font-family: 'Amiri', serif;
       font-size: 2rem;
@@ -151,7 +158,6 @@
       line-height: 1.3;
       margin-bottom: 1.5rem;
     }
-
     .divider {
       width: 48px;
       height: 1px;
@@ -159,7 +165,6 @@
       margin-bottom: 1.5rem;
       opacity: 0.5;
     }
-
     .book-desc {
       font-size: 15px;
       color: var(--text-secondary);
@@ -168,51 +173,145 @@
     }
 
     /* ACTIONS */
-    .actions {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .btn-download {
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+    .btn-download, .btn-back {
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-download {
       background: var(--gold);
       color: #0d0b08;
       border: none;
-      border-radius: 8px;
       padding: 12px 28px;
-      font-size: 14px;
-      font-family: 'IBM Plex Sans Arabic', sans-serif;
       font-weight: 500;
-      cursor: pointer;
-      text-decoration: none;
-      transition: opacity 0.15s;
     }
-
     .btn-download:hover { opacity: 0.85; }
-
+    
     .btn-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
       background: transparent;
       color: var(--text-secondary);
       border: 0.5px solid var(--border-light);
-      border-radius: 8px;
       padding: 12px 24px;
-      font-size: 14px;
-      font-family: 'IBM Plex Sans Arabic', sans-serif;
-      cursor: pointer;
-      text-decoration: none;
-      transition: border-color 0.15s, color 0.15s;
     }
-
     .btn-back:hover {
       border-color: var(--border);
       color: var(--text);
     }
+
+    /* COMMENTS SECTION SYSTEM */
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .comment-header h3 {
+      font-family: 'Amiri', serif;
+      color: var(--gold);
+      font-size: 1.5rem;
+    }
+    .sort-select {
+      background: var(--bg-secondary);
+      color: var(--gold);
+      border: 0.5px solid var(--border);
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .comment-form textarea {
+      width: 100%;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: inherit;
+      resize: none;
+      margin-bottom: 1rem;
+      font-size: 13px;
+    }
+    .comment-form textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .comments-list {
+      margin-top: 1.5rem;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-left: 5px;
+    }
+    
+    /* Custom Scrollbar for Comments */
+    .comments-list::-webkit-scrollbar { width: 6px; }
+    .comments-list::-webkit-scrollbar-track { background: var(--bg-secondary); border-radius: 4px; }
+    .comments-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .comments-list::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+    .comment-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: var(--bg-card);
+      border: 0.5px solid var(--border-light);
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+    }
+    
+    .user-avatar img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      object-fit: cover;
+    }
+
+    .comment-content-wrap { flex: 1; }
+    .comment-user {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
+    .comment-username {
+      color: var(--gold-light);
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .comment-text {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 5px;
+    }
+    .comment-meta-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .comment-date {
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+    .delete-btn {
+      color: var(--text-muted);
+      font-size: 12px;
+      transition: color 0.2s;
+    }
+    .delete-btn:hover { color: #ff4d4d; }
 
     /* FOOTER */
     footer {
@@ -222,25 +321,50 @@
       padding: 2rem;
       border-top: 0.5px solid var(--border-light);
       font-size: 12px;
-      color: var(--text-muted);
     }
-
     footer a {
       color: var(--text-muted);
       text-decoration: none;
-      border-bottom: 0.5px solid var(--border-light);
+      transition: color 0.2s;
     }
+    footer a:hover { color: var(--gold); }
+    /* تنسيق صورة الهيدر */
+.profile-pic-wrapper-header {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--gold-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* هذا السطر يمنع تشوه الصورة */
+}
+
+/* تحسين تنسيق صورة التعليق */
+.user-avatar img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  background: var(--bg-secondary); /* لون خلفية في حال كانت الصورة شفافة */
+}
   </style>
 </head>
 <body>
-    
+  
   <div class="grid-bg"></div>
 
   <header>
     <a href="{{ url_for('loading_bp.landing_page') }}" class="brand">SADEEM</a>
     <a href="{{ url_for('Library_Agatha.agatha_christie') }}" class="back-btn">
-      <i class="fa-solid fa-arrow-right" style="font-size:12px;"></i>
-      العودة للمكتبة
+      <i class="fa-solid fa-arrow-right"></i> العودة للمكتبة
     </a>
   </header>
 
@@ -248,13 +372,10 @@
     <div class="book-layout">
 
       <div class="cover-wrap">
-        <img 
-          src="{{ url_for('Library_Agatha.static', filename='uploads/' + book['cover_path']) }}?v={{ book['id'] }}" 
-          alt="{{ book['title'] }}"
-        >
+        <img src="{{ url_for('Library_Agatha.static', filename='uploads/' + book['cover_path']) }}?v={{ book['id'] }}" alt="{{ book['title'] }}">
         <div class="download-badge">
-          <i class="fa-solid fa-cloud-arrow-down" style="font-size:14px;"></i>
-          <span>{{ book['download_count'] or 0 }} تحميل</span>
+          <i class="fa-solid fa-cloud-arrow-down"></i>
+          <span><span id="download-count-number">{{ book['download_count'] or 0 }}</span> تحميل</span>
         </div>
       </div>
 
@@ -265,19 +386,74 @@
         <p class="book-desc">{{ book['desc_text'] }}</p>
 
         <div class="actions">
-          <a 
-            href="{{ url_for('Library_Agatha.download_file', book_id=book['id']) }}"
-            class="btn-download"
-            onclick="updateCount({{ book['id'] }})"
-          >
-            <i class="fa-solid fa-download" style="font-size:14px;"></i>
-            تحميل PDF ملكي
+          <a href="{{ url_for('Library_Agatha.download_file', book_id=book['id']) }}" class="btn-download" onclick="updateCount({{ book['id'] }})">
+            <i class="fa-solid fa-download"></i> تحميل PDF ملكي
           </a>
-
           <a href="{{ url_for('Library_Agatha.agatha_christie') }}" class="btn-back">
-            <i class="fa-solid fa-books" style="font-size:14px;"></i>
-            روايات أخرى
+            <i class="fa-solid fa-books"></i> روايات أخرى
           </a>
+        </div>
+      </div>
+
+      <div class="comment-area">
+        <div class="comment-header">
+          <h3>الآراء</h3>
+          <select class="sort-select" onchange="sortComments(this.value)">
+            <option value="newest">الأحدث</option>
+            <option value="oldest">الأقدم</option>
+          </select>
+        </div>
+
+        {% if session.get('user_id') %}
+        <form action="{{ url_for('Library_Agatha.add_comment', book_id=book.id) }}" method="POST" class="comment-form">
+          <textarea name="content" rows="3" placeholder="اكتب انطباعك الملكي عن هذه الرواية..." required></textarea>
+          <button type="submit" class="btn-download" style="width: 100%; padding: 10px;">نشر التعليق</button>
+        </form>
+        {% else %}
+        <p class="book-desc" style="font-size: 13px; text-align: center; margin-bottom: 1rem;">
+          يرجى <a href="{{ url_for('loading_bp.login') }}" style="color: var(--gold); text-decoration: none;">تسجيل الدخول</a> لترك تعليق.
+        </p>
+        {% endif %}
+
+        <div id="comments-list" class="comments-list">
+          {% for comment in comments %}
+          <div class="comment-item" data-date="{{ comment.created_at }}">
+            
+                <div class="user-avatar">
+                 {% set c_img = comment.profile_image if comment.profile_image else 'default.png' %}
+                 <img src="{{ url_for('static', filename='uploads/' + c_img) }}?v=1" alt="Avatar">
+               </div>
+               
+
+            <div class="comment-content-wrap">
+              <div class="comment-user">
+                <span class="comment-username">
+                  <i class="fa-solid fa-user-crown"></i>
+                  {{ comment.username if comment.username else "مستخدم رقم #" ~ comment.user_id }}
+                </span>
+                
+                {% if session.get('user_id') == comment.user_id or session.get('role') == 'admin' %}
+                <a href="{{ url_for('Library_Agatha.delete_comment', comment_id=comment.id, book_id=book.id) }}" 
+                   class="delete-btn"
+                   onclick="return confirm('هل أنت متأكد من الحذف؟')">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+                {% endif %}
+              </div>
+              
+              <p class="comment-text">{{ comment.content }}</p>
+              
+              <div class="comment-meta-footer">
+                <small class="comment-date">
+                  {{ comment.created_at.strftime('%Y-%m-%d %H:%M') if comment.created_at else '' }}
+                </small>
+              </div>
+            </div>
+
+          </div>
+          {% else %}
+          <p class="book-desc" style="font-size: 13px; text-align: center;">لا توجد تعليقات بعد. كن أول من يضع بصمته.</p>
+          {% endfor %}
         </div>
       </div>
 
@@ -285,10 +461,11 @@
   </div>
 
   <footer>
-    <a href="https://sadim.cloud">sadim.cloud</a>
+    <a href="https://sadim.cloud" target="_blank">sadim.cloud</a>
   </footer>
 
   <script>
+    // تحديث العداد ديناميكياً باستخدام AJAX
     function updateCount(bookId) {
       fetch(`/library/increment_download/${bookId}`, {
         method: 'POST',
@@ -297,13 +474,27 @@
       .then(r => r.json())
       .then(data => {
         if (data.success) {
-          const badge = document.querySelector('.download-badge span');
-          if (badge) badge.textContent = data.new_count + ' تحميل';
+          const badgeNumber = document.getElementById('download-count-number');
+          if (badgeNumber) badgeNumber.textContent = data.new_count;
         }
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error('Error updating count:', err));
+    }
+
+    // فرز التعليقات
+    function sortComments(order) {
+      const list = document.getElementById('comments-list');
+      const items = Array.from(list.getElementsByClassName('comment-item'));
+
+      items.sort((a, b) => {
+        const dateA = new Date(a.getAttribute('data-date'));
+        const dateB = new Date(b.getAttribute('data-date'));
+        return order === 'newest' ? dateB - dateA : dateA - dateB;
+      });
+
+      list.innerHTML = '';
+      items.forEach(item => list.appendChild(item));
     }
   </script>
 </body>
-
 </html>

@@ -159,3 +159,25 @@ class service:
      conn.close()
 
      return services
+
+    @staticmethod
+    def get_book_by_id(book_id):
+        """جلب كتاب بواسطة معرفه"""
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("SELECT id, image_url, name, category, description, title, type, price, download_url, delivery_time FROM services WHERE id=%s AND category='books'", (book_id,))
+        book = cur.fetchone()
+        cur.close()
+        conn.close()
+        return book
+
+    @staticmethod
+    def get_tool_by_id(tool_id):
+        """جلب أداة بواسطة معرفها"""
+        conn = get_db_connection()
+        cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute("SELECT id, image_url, name, category, description, title, type, price, download_url, delivery_time FROM services WHERE id=%s AND category='tech'", (tool_id,))
+        tool = cur.fetchone()
+        cur.close()
+        conn.close()
+        return tool
